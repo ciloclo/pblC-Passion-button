@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tt">
-   <application
-        android:label="tt"
+    package="com.pblc.emo">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <application
+        android:label="EmoMap"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -19,6 +20,8 @@
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
+              android:name="com.mapbox.token"
+              android:value="【pk.eyJ1IjoiY2lsb2NsbyIsImEiOiJja3l4YTRyOGswMno3MnZybnd5dWlucW5uIn0.oOYle4jaCzj9GEVg1iMyCw】"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

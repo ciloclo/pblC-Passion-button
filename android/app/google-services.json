@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "228105917148",
+    "project_id": "pblc-ykhn",
+    "storage_bucket": "pblc-ykhn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228105917148:android:684cc2132ba43187a6da19",
+        "android_client_info": {
+          "package_name": "com.pblc.emo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228105917148-uvbcgisv48urjbh3j9qsme3h2mpogq92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8KhwVTryiN9GjRnil2GKs4iO503sHiEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228105917148-uvbcgisv48urjbh3j9qsme3h2mpogq92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

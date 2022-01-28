@@ -1,4 +1,4 @@
-package com.example.tt
+package com.pblc.emo
 
 import io.flutter.embedding.android.FlutterActivity
 
