@@ -40,8 +40,6 @@ dependencies:
   cloud_firestore: ^3.1.6
   cloud_firestore_web: ^2.6.6
   geolocator: ^8.0.5
-  mapbox_gl: ^0.13.0
-  location: ^4.3.0
   
 
 
@@ -55,20 +53,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-
-dependency_overrides:																																																							
-  mapbox_gl:																																																							
-    git:																																																							
-      url: https://github.com/tobrun/flutter-mapbox-gl.git																																																							
-  mapbox_gl_platform_interface:																																																							
-    git:																																																							
-      url: https://github.com/tobrun/flutter-mapbox-gl.git																																																							
-      path: mapbox_gl_platform_interface																																																							
-  mapbox_gl_web:																																																							
-    git:																																																							
-      url: https://github.com/tobrun/flutter-mapbox-gl.git																																																							
-      path: mapbox_gl_web																																																							
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

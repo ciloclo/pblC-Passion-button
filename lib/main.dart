@@ -3,13 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:location/location.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 
 void main() async {
   // 初期化処理を追加
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(EmoBotton());
 }
 
@@ -151,7 +150,6 @@ class _LoginPageState extends State<LoginPage> {
 
 // 地図画面用Widget
 class EmoMap extends StatefulWidget {
-  const EmoMap({Key? key}) : super(key: key);
   EmoMap(this.user);
   final User user;
 
@@ -160,125 +158,7 @@ class EmoMap extends StatefulWidget {
 }
 
 class _EmoMapState extends State<EmoMap> {
-  final Completer<MapboxMapController> _controller = Completer();
-  final Location _locationService = Location();
-  // 地図スタイル用 Mapbox URL
-  final String _style = '【スタイルのURL】'; // 地図を日本語化したときなどに必要
-  // Location で緯度経度が取れなかったときのデフォルト値
-  final double _initialLat = 35.6895014;
-  final double _initialLong = 139.6917337;
-  // 現在位置
-  LocationData? _yourLocation;
-  // GPS 追従？
-  bool _gpsTracking = false;
-
-  // 現在位置の監視状況
-  StreamSubscription? _locationChangedListen;
   @override
-  void initState() {
-    super.initState();
-
-    // 現在位置の取得
-    _getLocation();
-
-    // 現在位置の変化を監視
-    _locationChangedListen =
-        _locationService.onLocationChanged.listen((LocationData result) async {
-      setState(() {
-        _yourLocation = result;
-      });
-    });
-    setState(() {
-      _gpsTracking = true;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    // 監視を終了
-    _locationChangedListen?.cancel();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _makeMapboxMap(),
-      floatingActionButton: _makeGpsIcon(),
-    );
-  }
-
-  Widget _makeMapboxMap() {
-    if (_yourLocation == null) {
-      // 現在位置が取れるまではロード中画面を表示
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    // GPS 追従が ON かつ地図がロードされている→地図の中心を移動
-    if (_gpsTracking) {
-      _controller.future.then((mapboxMap) {
-        mapboxMap.moveCamera(CameraUpdate.newLatLng(LatLng(
-            _yourLocation!.latitude ?? _initialLat,
-            _yourLocation!.longitude ?? _initialLong)));
-      });
-    }
-    // Mapbox ウィジェットを返す
-    return MapboxMap(
-      // 地図（スタイル）を指定（デフォルト地図の場合は省略可）
-      styleString: _style,
-      // 初期表示される位置情報を現在位置から設定
-      initialCameraPosition: CameraPosition(
-        target: LatLng(_yourLocation!.latitude ?? _initialLat,
-            _yourLocation!.longitude ?? _initialLong),
-        zoom: 13.5,
-      ),
-      onMapCreated: (MapboxMapController controller) {
-        _controller.complete(controller);
-      },
-      compassEnabled: true,
-      // 現在位置を表示する
-      myLocationEnabled: true,
-      // 地図をタップしたとき
-      onMapClick: (Point<double> point, LatLng tapPoint) {
-        _controller.future.then((mapboxMap) {
-          mapboxMap.moveCamera(CameraUpdate.newLatLng(tapPoint));
-        });
-        setState(() {
-          _gpsTracking = false;
-        });
-      },
-    );
-  }
-
-  Widget _makeGpsIcon() {
-    return FloatingActionButton(
-      backgroundColor: Colors.blue,
-      onPressed: () {
-        _gpsToggle();
-      },
-      child: Icon(
-        // GPS 追従の ON / OFF に合わせてアイコン表示する
-        _gpsTracking ? Icons.gps_fixed : Icons.gps_not_fixed,
-      ),
-    );
-  }
-
-  void _gpsToggle() {
-    setState(() {
-      _gpsTracking = !_gpsTracking;
-    });
-    // ここは iOS では不要
-    if (_gpsTracking) {
-      _controller.future.then((mapboxMap) {
-        mapboxMap.moveCamera(CameraUpdate.newLatLng(LatLng(
-            _yourLocation!.latitude ?? _initialLat,
-            _yourLocation!.longitude ?? _initialLong)));
-      });
-    }
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -311,10 +191,6 @@ class _EmoMapState extends State<EmoMap> {
       ),
     );
   }
-
-  void _getLocation() async {
-    _yourLocation = await _locationService.getLocation();
-  }
 }
 
 // 感情画面用Widget
@@ -332,6 +208,20 @@ class _EmoSelectState extends State<EmoSelect> {
   int counthappy = 0;
   int countsad = 0;
   String _location = "no data";
+  Future<void> getLocation() async {
+    // 現在の位置を返す
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    // 北緯がプラス。南緯がマイナス
+    print("緯度: " + position.latitude.toString());
+    // 東経がプラス、西経がマイナス
+    print("経度: " + position.longitude.toString());
+    setstate() {
+      _location = position.toString();
+    }
+
+    ;
+  }
 
   @override
   Widget build(BuildContext context) {
