@@ -6,6 +6,8 @@
         android:label="EmoMap"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBrDkgrPAEcx8HPH5Xamx3G5a7roTlt4C8"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
